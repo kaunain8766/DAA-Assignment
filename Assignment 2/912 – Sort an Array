@@ -1,0 +1,48 @@
+class Solution {
+    public int[] sortArray(int[] nums) {
+        mergeSort(nums, 0, nums.length - 1);
+        return nums;
+    }
+
+    private void mergeSort(int[] nums, int left, int right) {
+        if (left >= right) return;
+
+        int mid = left + (right - left) / 2;
+        
+        // Divide: Left aur Right halves ko recursion se sort karein
+        mergeSort(nums, left, mid);
+        mergeSort(nums, mid + 1, right);
+
+        // Conquer: Dono sorted halves ko merge karein
+        merge(nums, left, mid, right);
+    }
+
+    private void merge(int[] nums, int left, int mid, int right) {
+        int[] temp = new int[right - left + 1];
+        int i = left, j = mid + 1, k = 0;
+
+        // Elements ko compare karke sorted order me temp array me daalein
+        while (i <= mid && j <= right) {
+            if (nums[i] <= nums[j]) {
+                temp[k++] = nums[i++];
+            } else {
+                temp[k++] = nums[j++];
+            }
+        }
+
+        // Left half me bache hue elements
+        while (i <= mid) {
+            temp[k++] = nums[i++];
+        }
+
+        // Right half me bache hue elements
+        while (j <= right) {
+            temp[k++] = nums[j++];
+        }
+
+        // Temp array ke sorted values ko wapas original array me copy karein
+        for (int p = 0; p < temp.length; p++) {
+            nums[left + p] = temp[p];
+        }
+    }
+}
